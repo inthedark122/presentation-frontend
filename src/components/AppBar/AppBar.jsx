@@ -1,7 +1,7 @@
 // @flow
 import * as React from "react";
 import {inject, observer} from "mobx-react";
-import {compose} from "recompose";
+import {compose, lifecycle, withHandlers} from "recompose";
 import AppBarMaterial from "material-ui/AppBar/AppBar";
 import IconButton from "material-ui/IconButton";
 import Button from "material-ui/Button/Button";
@@ -20,6 +20,8 @@ type PropsType = {|
     slideStore: $PropertyType<RootStoreType, "slideStore">,
     projectStore: $PropertyType<RootStoreType, "projectStore">,
 |};
+
+const CHAR_CODE_EDIT = 69;
 
 const AppBar = ({editorStore, slideStore, projectStore}: PropsType) => {
     if (editorStore.isFullScreen) {
@@ -65,4 +67,22 @@ const AppBar = ({editorStore, slideStore, projectStore}: PropsType) => {
     );
 };
 
-export default compose(inject("editorStore", "slideStore", "projectStore"), observer)(AppBar);
+export default compose(
+    inject("editorStore", "slideStore", "projectStore"),
+    withHandlers({
+        onKeyDownEdit: (props) => (event: SyntheticEvent<HTMLButtonElement>) => {
+            if (event.keyCode === CHAR_CODE_EDIT && (event.ctrlKey || event.metaKey)) {
+                props.editorStore.openCloseEditor();
+            }
+        },
+    }),
+    lifecycle({
+        componentDidMount() {
+            document.addEventListener("keydown", this.props.onKeyDownEdit);
+        },
+        componentWillUnmount() {
+            document.removeEventListener("keydown", this.props.onKeyDownEdit);
+        },
+    }),
+    observer,
+)(AppBar);

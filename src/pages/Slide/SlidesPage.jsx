@@ -3,10 +3,8 @@ import * as React from "react";
 import {withStyles} from "material-ui/styles";
 import {compose, lifecycle, withHandlers} from "recompose";
 import {observer, inject} from "mobx-react";
-import Card from "material-ui/Card/Card";
 import Grid from "material-ui/Grid/Grid";
 import Button from "material-ui/Button/Button";
-import {CardActions, CardContent} from "material-ui/Card";
 import IconButton from "material-ui/IconButton/IconButton";
 import Star from "material-ui-icons/Star";
 import StarBorder from "material-ui-icons/StarBorder";
@@ -25,17 +23,18 @@ type PropsType = {|
     classes: Object,
     onAddSlide: () => void,
     onDeleteSlide: () => void,
+    onSaveSlide: () => void,
 |};
 
 const styles = {
     card: {
-        // Height: "100%",
+        height: "100%",
     },
     cardActions: {
         maxWidth: "100%",
     },
     cardContent: {
-        height: "calc(100vh - 84px)",
+        flex: 1,
         maxWidth: "100%",
         overflowY: "auto",
     },
@@ -44,40 +43,36 @@ const styles = {
 const NEXT_KEY_CODE = 39;
 const PREV_KEY_CODE = 37;
 
-const SlidesPage = ({slideStore, editorStore, match, classes, onAddSlide, onDeleteSlide}: PropsType) => (
-    <Card className={classes.card} component={Grid} container direction="column" justify="space-between">
-        <CardContent className={classes.cardContent} component={Grid} item>
+const SlidesPage = ({slideStore, editorStore, match, classes, onAddSlide, onDeleteSlide, onSaveSlide}: PropsType) => (
+    <Grid className={classes.card} container direction="column" justify="space-between">
+        <Grid className={classes.cardContent} item>
             {slideStore.activeSlide && slideStore.activeSlide.model ? (
                 <Builder child={slideStore.activeSlide.model} />
             ) : null}
-        </CardContent>
-        <CardActions className={classes.cardActions}>
-            <Grid container justify="space-between" alignItems="center">
-                <Grid item xs={12} md={2}>
-                    {editorStore.isFullScreen ? null : <Button onClick={() => slideStore.save()}>Сохранить</Button>}
-                </Grid>
-                <Grid item xs={12} md={8}>
-                    {slideStore.slides.map((slide, index) => (
-                        <IconButton
-                            component={Link}
-                            key={index}
-                            to={`/projects/${match.params.projectId}/slides/${index}`}
-                        >
+        </Grid>
+        <Grid className={classes.cardActions} item container justify="space-between">
+            <Grid item xs={12} md={2}>
+                {editorStore.isFullScreen ? null : <Button onClick={onSaveSlide}>Сохранить</Button>}
+            </Grid>
+            <Grid container item xs={12} md={7} alignContent="center" justify="center">
+                {slideStore.slides.map((slide, index) => (
+                    <Grid item key={index}>
+                        <IconButton component={Link} to={`/projects/${match.params.projectId}/slides/${index}`}>
                             {index === slideStore.activeSlideIndex ? <Star /> : <StarBorder />}
                         </IconButton>
-                    ))}
-                </Grid>
-                <Grid item xs={12} md={2}>
-                    {editorStore.isFullScreen ? null : (
-                        <React.Fragment>
-                            <Button onClick={onDeleteSlide}>Удалить</Button>
-                            <Button onClick={onAddSlide}>Добавить</Button>
-                        </React.Fragment>
-                    )}
-                </Grid>
+                    </Grid>
+                ))}
             </Grid>
-        </CardActions>
-    </Card>
+            <Grid item xs={12} md={3}>
+                {editorStore.isFullScreen ? null : (
+                    <React.Fragment>
+                        <Button onClick={onDeleteSlide}>Удалить</Button>
+                        <Button onClick={onAddSlide}>Добавить</Button>
+                    </React.Fragment>
+                )}
+            </Grid>
+        </Grid>
+    </Grid>
 );
 
 export default compose(
@@ -92,6 +87,9 @@ export default compose(
             const prevSlideIndex = Math.max(0, props.slideStore.activeSlideIndex - 1);
 
             props.history.push(`/projects/${props.match.params.projectId}/slides/${prevSlideIndex}`);
+        },
+        onSaveSlide: (props) => () => {
+            props.slideStore.save();
         },
     }),
     withHandlers({
