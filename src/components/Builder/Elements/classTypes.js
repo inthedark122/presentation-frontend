@@ -12,7 +12,7 @@ export const initialValues = {
         src: "",
     },
     grid: {
-        alignItems: "stretch",
+        alignItems: "center",
         childs: [],
         classType: "grid",
         direction: "row",

@@ -1,5 +1,6 @@
 // @flow
 import axios from "../request";
+import {initialValues} from "../../components/Builder/Elements/classTypes";
 
 export async function load(projectId: string, slideIndex: number) {
     const response = await axios.get(`/projects/${projectId}/slides`);
@@ -38,13 +39,21 @@ export async function slideSaveAction() {
     });
 }
 
-export async function slideLoadAction(projectId: string) {
+export async function slideAddAction(projectId: string) {
     const data = {
-        model: JSON.stringify({childs: [], classType: "grid", id: 1}),
+        model: JSON.stringify({...initialValues.grid, direction: "column"}),
         number: this.slides.length + 1,
     };
 
     await axios.post(`/projects/${projectId}/slides`, data);
+
+    await this.load(projectId, this.slides.length);
+}
+
+export async function slideDeleteAction(projectId: string) {
+    const slideId = this.activeSlide.id;
+
+    await axios.delete(`/slides/${slideId}`);
 
     await this.load(projectId);
 }

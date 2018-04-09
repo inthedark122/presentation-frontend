@@ -23,6 +23,8 @@ type PropsType = {|
         },
     },
     classes: Object,
+    onAddSlide: () => void,
+    onDeleteSlide: () => void,
 |};
 
 const styles = {
@@ -38,7 +40,7 @@ const styles = {
 const NEXT_KEY_CODE = 39;
 const PREV_KEY_CODE = 37;
 
-const SlidesPage = ({slideStore, editorStore, match, classes}: PropsType) => (
+const SlidesPage = ({slideStore, editorStore, match, classes, onAddSlide, onDeleteSlide}: PropsType) => (
     <Card className={classes.card} component={Grid} container direction="column" justify="space-between">
         <CardContent className={classes.cardContent} component={Grid} item>
             {slideStore.activeSlide && slideStore.activeSlide.model ? (
@@ -63,7 +65,10 @@ const SlidesPage = ({slideStore, editorStore, match, classes}: PropsType) => (
                 </Grid>
                 <Grid item>
                     {editorStore.isFullScreen ? null : (
-                        <Button onClick={() => slideStore.add(match.params.projectId)}>Добавить</Button>
+                        <React.Fragment>
+                            <Button onClick={onDeleteSlide}>Удалить</Button>
+                            <Button onClick={onAddSlide}>Добавить</Button>
+                        </React.Fragment>
                     )}
                 </Grid>
             </Grid>
@@ -86,6 +91,12 @@ export default compose(
         },
     }),
     withHandlers({
+        onAddSlide: ({slideStore, match}) => () => {
+            slideStore.add(match.params.projectId);
+        },
+        onDeleteSlide: ({slideStore, match}) => () => {
+            slideStore.deleteSlide(match.params.projectId);
+        },
         onKeyDown: (props) => (event: SyntheticEvent<HTMLButtonElement>) => {
             if (event.keyCode === NEXT_KEY_CODE) {
                 props.onNextSlide();

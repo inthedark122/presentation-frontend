@@ -6,7 +6,8 @@ import {
     loadDetailSlide,
     nextSlide,
     slideSaveAction,
-    slideLoadAction,
+    slideAddAction,
+    slideDeleteAction,
 } from "../actions/sliderAction";
 
 export interface SlideModelType {
@@ -79,5 +80,7 @@ export class SlideModel implements SlideModelType {
         }
     });
 
-    add = action("add", slideLoadAction);
+    add = action("add", slideAddAction);
+
+    deleteSlide = action("deleteSlide", slideDeleteAction);
 }
