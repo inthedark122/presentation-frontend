@@ -26,7 +26,9 @@ type PropsType = {|
     onSaveSlide: () => void,
 |};
 
-const styles = {
+const CARD_CONTENT_PADDING = 8;
+
+const styles = (theme: any) => ({
     card: {
         height: "100%",
     },
@@ -37,8 +39,12 @@ const styles = {
         flex: 1,
         maxWidth: "100%",
         overflowY: "auto",
+
+        [theme.breakpoints.up("md")]: {
+            margin: theme.spacing.unit * CARD_CONTENT_PADDING,
+        },
     },
-};
+});
 
 const NEXT_KEY_CODE = 39;
 const PREV_KEY_CODE = 37;
