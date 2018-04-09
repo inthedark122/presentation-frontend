@@ -20,6 +20,7 @@ type TypographyProps = {
     child: Object,
     className: string,
     classes: Object,
+    onClick?: (event: SyntheticEvent<>) => void,
 };
 
 const configs = [
@@ -49,14 +50,15 @@ const configs = [
     },
 ];
 
-const Typography = ({child, className, classes}: TypographyProps) => {
+const Typography = ({child, className, classes, onClick}: TypographyProps) => {
     const {fontSize, id, classType, ...typographyProps} = child;
     return (
         <React.Fragment>
             <TypographyMaterial
                 className={`${className} ${classes[`fontSize${fontSize}`]}`}
+                onClick={onClick}
                 {...typographyProps}
-                noWrap
+                noWrap={false}
             />
             <Editor values={child} configs={configs} />
         </React.Fragment>

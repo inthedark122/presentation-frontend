@@ -3,10 +3,13 @@ import * as React from "react";
 import {inject, observer} from "mobx-react";
 import {compose} from "recompose";
 import AppBarMaterial from "material-ui/AppBar/AppBar";
+import IconButton from "material-ui/IconButton";
 import Button from "material-ui/Button/Button";
 import Toolbar from "material-ui/Toolbar/Toolbar";
 import Edit from "material-ui-icons/Edit";
+import Add from "material-ui-icons/Add";
 import Delete from "material-ui-icons/Delete";
+import SelectAll from "material-ui-icons/SelectAll";
 import {Link} from "react-router-dom";
 import {type RootStoreType} from "../../mobx/RootStore";
 import AppBarEditorSelect from "./AppBarEditorSelect.jsx";
@@ -29,16 +32,20 @@ const AppBar = ({editorStore, slideStore, projectStore}: PropsType) => {
                 <Button component={Link} to="/projects">
                     Проекты
                 </Button>
-                <Button onClick={projectStore.toggleOpenAdd}>Добавить</Button>
+                <IconButton onClick={projectStore.toggleOpenAdd}>
+                    <Add />
+                </IconButton>
                 {slideStore.activeSlide && slideStore.activeSlide.model ? (
                     <React.Fragment>
-                        <Button onClick={editorStore.openCloseEditorSelect}>Выбор поля</Button>
+                        <IconButton onClick={editorStore.openCloseEditorSelect}>
+                            <SelectAll />
+                        </IconButton>
                         {editorStore.editorId === "0" || !slideStore.activeSlide.model ? null : (
                             <React.Fragment>
-                                <Button onClick={editorStore.openCloseEditor} variant="flat">
+                                <IconButton onClick={editorStore.openCloseEditor} variant="flat">
                                     <Edit />
-                                </Button>
-                                <Button
+                                </IconButton>
+                                <IconButton
                                     onClick={() => {
                                         slideStore.deleteElement(editorStore.editorId);
                                         editorStore.leave();
@@ -46,7 +53,7 @@ const AppBar = ({editorStore, slideStore, projectStore}: PropsType) => {
                                     variant="flat"
                                 >
                                     <Delete />
-                                </Button>
+                                </IconButton>
                             </React.Fragment>
                         )}
                     </React.Fragment>

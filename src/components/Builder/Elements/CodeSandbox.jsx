@@ -4,6 +4,7 @@ import Editor from "../../Editor/Editor.jsx";
 
 export type CodeSandboxPropsType = {
     className: string,
+    onClick?: (event: SyntheticEvent<>) => void,
     child: {
         src: string,
     },
@@ -17,11 +18,11 @@ const configs = [
     },
 ];
 
-const CodeSandbox = ({child, className}: CodeSandboxPropsType) => {
+const CodeSandbox = ({child, className, onClick}: CodeSandboxPropsType) => {
     const {src} = child;
 
     return (
-        <span className={className}>
+        <span className={className} onClick={onClick}>
             <iframe
                 title={src}
                 src={src}

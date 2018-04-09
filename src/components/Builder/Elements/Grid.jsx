@@ -2,7 +2,7 @@
 import * as React from "react";
 import {observer, inject} from "mobx-react";
 import {compose, withStateHandlers} from "recompose";
-import GridMaterial from "material-ui/Grid/Grid";
+import GridMaterial, {type AlignItems, type Justify} from "material-ui/Grid/Grid";
 import Button from "material-ui/Button/Button";
 import Dialog from "material-ui/Dialog/Dialog";
 import List, {ListItem, ListItemText} from "material-ui/List";
@@ -22,8 +22,10 @@ export type GridPropsType = {|
     onOpenNewModal: () => void,
     onAddChild: (classType: string) => void,
     child: {
+        alignItems: AlignItems,
         childs: Array<Object>,
         direction: string,
+        justify: Justify,
     },
     classes?: Object,
 |};
@@ -34,6 +36,18 @@ const configs = [
         label: "Направление",
         name: "direction",
         options: ["column", "row"],
+    },
+    {
+        classType: "select",
+        label: "justify",
+        name: "justify",
+        options: ["flex-start", "center", "flex-end", "space-between", "space-around"],
+    },
+    {
+        classType: "select",
+        label: "alignItems",
+        name: "alignItems",
+        options: ["flex-start", "center", "flex-end", "stretch", "baseline"],
     },
 ];
 
@@ -47,12 +61,12 @@ const Grid = ({
     onAddChild,
     editorStore,
 }: GridPropsType) => {
-    const {childs, direction} = child;
+    const {childs, direction, justify, alignItems} = child;
 
     return (
         <GridMaterial
-            justify="center"
-            alignItems="stretch"
+            justify={justify}
+            alignItems={alignItems}
             wrap="nowrap"
             direction={direction}
             container

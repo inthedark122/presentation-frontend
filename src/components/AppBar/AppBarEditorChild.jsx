@@ -39,7 +39,7 @@ const AppBarEditorChild = ({child, classes, className, chooseEditorId, editorId}
             ) : null}
         </ListItem>
         {child.childs ? (
-            <List component="div" disablePadding>
+            <List component="div" disablePadding className={className}>
                 {child.childs.map((nestedChild, index) => (
                     <AppBarEditorChildEnhance
                         key={index}
