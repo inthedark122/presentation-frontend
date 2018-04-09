@@ -29,10 +29,14 @@ type PropsType = {|
 
 const styles = {
     card: {
-        height: "100%",
+        // Height: "100%",
+    },
+    cardActions: {
+        maxWidth: "100%",
     },
     cardContent: {
-        height: "calc(100% - 84px)",
+        height: "calc(100vh - 84px)",
+        maxWidth: "100%",
         overflowY: "auto",
     },
 };
@@ -47,12 +51,12 @@ const SlidesPage = ({slideStore, editorStore, match, classes, onAddSlide, onDele
                 <Builder child={slideStore.activeSlide.model} />
             ) : null}
         </CardContent>
-        <CardActions>
+        <CardActions className={classes.cardActions}>
             <Grid container justify="space-between" alignItems="center">
-                <Grid item>
+                <Grid item xs={12} md={2}>
                     {editorStore.isFullScreen ? null : <Button onClick={() => slideStore.save()}>Сохранить</Button>}
                 </Grid>
-                <Grid item>
+                <Grid item xs={12} md={8}>
                     {slideStore.slides.map((slide, index) => (
                         <IconButton
                             component={Link}
@@ -63,7 +67,7 @@ const SlidesPage = ({slideStore, editorStore, match, classes, onAddSlide, onDele
                         </IconButton>
                     ))}
                 </Grid>
-                <Grid item>
+                <Grid item xs={12} md={2}>
                     {editorStore.isFullScreen ? null : (
                         <React.Fragment>
                             <Button onClick={onDeleteSlide}>Удалить</Button>
