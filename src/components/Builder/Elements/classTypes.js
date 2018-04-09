@@ -1,4 +1,4 @@
-export const classTypes = ["codesandbox", "grid", "typography", "code"];
+export const classTypes = ["codesandbox", "grid", "typography", "code", "markdown"];
 
 export const initialValues = {
     code: {
@@ -17,6 +17,10 @@ export const initialValues = {
         classType: "grid",
         direction: "row",
         justify: "center",
+    },
+    markdown: {
+        classType: "markdown",
+        source: "Пример",
     },
     typography: {
         align: "inherit",

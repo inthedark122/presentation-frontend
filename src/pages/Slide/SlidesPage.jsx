@@ -106,12 +106,14 @@ export default compose(
             slideStore.deleteSlide(match.params.projectId);
         },
         onKeyDown: (props) => (event: SyntheticEvent<HTMLButtonElement>) => {
-            if (event.keyCode === NEXT_KEY_CODE) {
-                props.onNextSlide();
-            }
+            if (!props.editorStore.openEditor) {
+                if (event.keyCode === NEXT_KEY_CODE) {
+                    props.onNextSlide();
+                }
 
-            if (event.keyCode === PREV_KEY_CODE) {
-                props.onPrevSlide();
+                if (event.keyCode === PREV_KEY_CODE) {
+                    props.onPrevSlide();
+                }
             }
         },
     }),

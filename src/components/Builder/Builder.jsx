@@ -4,6 +4,7 @@ import cn from "classnames";
 import {compose, withHandlers} from "recompose";
 import {inject, observer} from "mobx-react";
 import {withStyles} from "material-ui/styles";
+import GridMaterial from "material-ui/Grid/Grid";
 import {type EditorModelType} from "../../mobx/Models/EditorModel";
 import {getComponent} from "./Elements";
 
@@ -28,10 +29,11 @@ type PropsType = {
     classIds: string,
     classes: Object,
     editorStore: EditorModelType,
+    withGrid?: boolean,
     handleClickElement: (event: SyntheticEvent<>) => void,
 };
 
-const Builder = ({child, classes = {}, classIds = "", editorStore, handleClickElement}: PropsType) => {
+const Builder = ({child, classes = {}, classIds = "", editorStore, handleClickElement, withGrid}: PropsType) => {
     const {classType} = child;
     const Component = getComponent(classType);
 
@@ -43,15 +45,19 @@ const Builder = ({child, classes = {}, classIds = "", editorStore, handleClickEl
         [classes.componentSelected]: editorStore.editorId === child.id && !editorStore.isFullScreen,
     });
 
-    return (
-        <Component
-            child={child}
-            classIds={`${classIds}.${child.id}`}
-            Builder={StylesBuilder}
-            className={className}
-            onClick={handleClickElement}
-        />
+    const content = (
+        <Component child={child} classIds={`${classIds}.${child.id}`} Builder={StylesBuilder} className={className} />
     );
+
+    if (withGrid) {
+        return (
+            <GridMaterial style={{maxWidth: "100%"}} item onClick={handleClickElement}>
+                {content}
+            </GridMaterial>
+        );
+    }
+
+    return content;
 };
 
 const StylesBuilder = compose(

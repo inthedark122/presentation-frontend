@@ -72,11 +72,7 @@ const Grid = ({
             container
             className={className}
         >
-            {childs.map((gridChild, index) => (
-                <GridMaterial style={{maxWidth: "100%"}} key={index} item>
-                    <Builder child={gridChild} />
-                </GridMaterial>
-            ))}
+            {childs.map((gridChild, index) => <Builder key={index} child={gridChild} withGrid />)}
             {editorStore.isFullScreen ? null : (
                 <Button onClick={onOpenNewModal} variant="flat" mini>
                     <Add />
